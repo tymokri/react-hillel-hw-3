@@ -17,11 +17,17 @@ const PostEditModal = ({ isPostEditModalOpen, handleOk, editedPost, handleCancel
         form.resetFields();
     };
 
+    const handleOkAfterSubmit = () => {
+        form.submit();
+        handleOk(true);
+    };
+
     return (
         <Modal
             title="You can update your post"
             open={ isPostEditModalOpen }
-            onOk={ () => handleOk(true) }
+            onOk={ handleOkAfterSubmit }
+            okText={ 'Update' }
             onCancel={ handleCancel }
             afterOpenChange={ () => onReset() }
         >
@@ -64,17 +70,9 @@ const PostEditModal = ({ isPostEditModalOpen, handleOk, editedPost, handleCancel
                 </Form.Item>
 
                 <Form.Item>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                    >
-                        Update post
-                    </Button>
-
                     <Button htmlType="button" onClick={ onReset }>
                         Reset
                     </Button>
-
                 </Form.Item>
             </Form>
         </Modal>

@@ -17,11 +17,17 @@ const PostCreateModal = ({ isPostCreateModalOpen, handleOk, handleCancel, handle
         form.resetFields();
     };
 
+    const handleOkAfterSubmit = () => {
+        form.submit();
+        handleOk(true);
+    };
+
     return (
         <Modal
             title="You can create your post"
             open={ isPostCreateModalOpen }
-            onOk={ () => handleOk(true) }
+            onOk={ handleOkAfterSubmit }
+            okText={ 'Create' }
             onCancel={ handleCancel }
         >
             <Form
@@ -61,10 +67,6 @@ const PostCreateModal = ({ isPostCreateModalOpen, handleOk, handleCancel, handle
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Create
-                    </Button>
-
                     <Button htmlType="button" onClick={ onReset }>
                         Reset
                     </Button>

@@ -5,6 +5,7 @@ import {Row, InputNumber, Button} from 'antd';
 import PostDeleteModal from "./PostDeleteModal";
 import PostCreateModal from "./PostCreateModal";
 import PostEditModal from "./PostEditModal";
+import useDebounce from "../hooks/useDebounce";
 
 
 const PostsCatalog = () => {
@@ -70,9 +71,13 @@ const PostsCatalog = () => {
     };
 
     const changeNumberOfPosts = (value) => {
-        setTimeout(() => {
-            setNumberOfPosts(value);
-        }, 1000);
+        setNumberOfPosts(value);
+    };
+
+    const changeNumberOfPostsDebounced = useDebounce(changeNumberOfPosts, 2000);
+
+    const changeNumberOfPostsWithDebounce = (value) => {
+        changeNumberOfPostsDebounced(value);
     };
 
     const handleOkDelete = () => {
@@ -119,8 +124,8 @@ const PostsCatalog = () => {
         const allPosts = JSON.parse(getPostsFromStorage());
         const lastPostId = allPosts.at(-1).id;
         newPostToSave.id = lastPostId + 1;
-        allPosts.push(newPostToSave);
-        setPostsToStorage(allPosts);
+        const allPostsAfterAdd = [...allPosts, newPostToSave];
+        setPostsToStorage([...allPostsAfterAdd]);
         const allPostsAfterAddNewPost = JSON.parse(getPostsFromStorage());
         setPostsList(allPostsAfterAddNewPost);
     };
@@ -169,8 +174,8 @@ const PostsCatalog = () => {
                     <InputNumber
                         min={1}
                         max={100}
-                        value={numberOfPosts}
-                        onChange={ changeNumberOfPosts }
+                        value={ numberOfPosts }
+                        onChange={ changeNumberOfPostsWithDebounce }
                     />
                 </div>
 
